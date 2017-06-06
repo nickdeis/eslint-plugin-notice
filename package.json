@@ -1,0 +1,25 @@
+{
+  "name": "eslint-plugin-top",
+  "version": "0.0.1",
+  "description": "An eslint rule that checks the top comment and fixes it too!",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "eslint",
+    "plugin",
+    "eslint-plugin",
+    "top",
+    "header",
+    "lint"
+  ],
+  "author": "Nicholas Deis",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^3.19.0"
+  }
+}
