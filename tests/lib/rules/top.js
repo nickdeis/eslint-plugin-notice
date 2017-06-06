@@ -15,26 +15,31 @@ const mustMatch = "[0-9]{0,4}, Nicholas Deis";
 
 const ruleTester = new RuleTester();
 
+const notExact = `
+/**
+ * Not exactly what I was looking for
+ */
+function leastYouTried(){
+    return false;
+}
+`;
+
+const noStyle = `
+function noStyle(){
+    return "I didn't read the style guide :(";
+}
+`
+
+
 ruleTester.run("top",rule,{
     invalid:[
         {
-            code:`
-            function noStyle(){
-                return "I didn't read the style guide :(";
-            }
-            `,
+            code:noStyle,
             options:[{mustMatch,template}],
             errors: [{ message: `Found no text, and therefore there is no top comment`}]
         },
         {
-            code:`
-                /**
-                 * Not exactly what I was looking for
-                 */
-                function leastYouTried(){
-                    return false;
-                }
-            `,
+            code:notExact,
             options:[{mustMatch,template}],
             errors:[{message:`Could not find a match for the mustMatch pattern in the top comment`}]
         }
