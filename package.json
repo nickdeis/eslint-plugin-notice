@@ -12,11 +12,11 @@
   "keywords": [
     "eslint",
     "plugin",
-    "eslint-plugin",
     "notice",
     "copyright",
     "header",
-    "lint"
+    "lint",
+    "eslintplugin"
   ],
   "repository": "https://github.com/nickdeis/eslint-plugin-notice",
   "author": "nickdeis",

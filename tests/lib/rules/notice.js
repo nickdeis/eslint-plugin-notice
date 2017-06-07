@@ -3,7 +3,7 @@
  * @author Nick Deis
  */
 const RuleTester = require("eslint/lib/testers/rule-tester"),
-rule = require("../../../lib/rules/notice"),
+rule = require("../../..").rules.notice,
 fs = require("fs"),
 path = require("path");
 

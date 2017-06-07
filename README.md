@@ -11,7 +11,7 @@ Throw an error when a file doesn't have copyright notice
 {
     "plugins":["notice"],
     "rules":{
-        "notice":["error",{"mustMatch":"Copyright \\(c\\) [0-9]{0,4}, Nick Deis"}]
+        "notice/notice":["error",{"mustMatch":"Copyright \\(c\\) [0-9]{0,4}, Nick Deis"}]
     }
 }
 ```
@@ -19,7 +19,7 @@ Throw an error when a file doesn't have copyright notice
 Add a template to `--fix` it
 ```json
 {
-    "notice":["error",
+    "notice/notice":["error",
         {
         "mustMatch":"Copyright \\(c\\) [0-9]{0,4}, Nick Deis",
         "template":"/** Copyright (c) <%= YEAR %>, Nick Deis **/"
@@ -38,7 +38,7 @@ or use a file
 ```
 ```json
 {
-    "notice":["error",
+    "notice/notice":["error",
         {
         "mustMatch":"Copyright \\(c\\) [0-9]{0,4}, Nick Deis",
         "templateFile":"config/copyright.js"
