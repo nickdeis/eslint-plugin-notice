@@ -1,5 +1,5 @@
 module.exports = {
     rules:{
-        top:require("./lib/rules/top.js")
+        notice:require("./lib/rules/notice.js")
     }
 }

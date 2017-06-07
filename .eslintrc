@@ -1,6 +1,6 @@
 {
-    "plugins":["top"],
+    "plugins":["notice"],
     "rule":{
-        "top":["error",{"mustMatch":"[0-9]{0,4}, Nicholas Deis","templateFile":"../tests/test-template.js"}]
+        "notice":["error",{"mustMatch":"[0-9]{0,4}, Nicholas Deis","templateFile":"../tests/test-template.js"}]
     }
 }

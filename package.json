@@ -1,5 +1,5 @@
 {
-  "name": "eslint-plugin-top",
+  "name": "eslint-plugin-notice",
   "version": "0.0.1",
   "description": "An eslint rule that checks the top comment and fixes it too!",
   "main": "index.js",
@@ -7,13 +7,14 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/lib/rules/notice.js && node tests/cli-test.js"
   },
   "keywords": [
     "eslint",
     "plugin",
     "eslint-plugin",
-    "top",
+    "notice",
+    "copyright",
     "header",
     "lint"
   ],
@@ -24,5 +25,8 @@
   },
   "dependencies": {
     "lodash": "^4.17.4"
+  },
+  "peerDependencies": {
+    "eslint": "^3.19.0"
   }
 }
