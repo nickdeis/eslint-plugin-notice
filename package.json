@@ -18,6 +18,7 @@
     "header",
     "lint"
   ],
+  "repository": "https://github.com/nickdeis/eslint-plugin-notice",
   "author": "nickdeis",
   "license": "MIT",
   "devDependencies": {
