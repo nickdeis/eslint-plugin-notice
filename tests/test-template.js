@@ -1,4 +1,4 @@
 /**
- * Copyright (c) <%= YEAR %>, Nicholas Deis
+ * Copyright (c) <%= YEAR %>, Nick Deis
  */
 

@@ -4,7 +4,7 @@ var cli = new CLIEngine(
     {
         useEslintrc: false,
         rules:{
-            notice:["error",{"mustMatch":"[0-9]{0,4}, Nicholas Deis","templateFile":path.join(__dirname,"../tests/test-template.js")}]
+            notice:["error",{"mustMatch":"[0-9]{0,4}, Nick Deis","templateFile":path.join(__dirname,"../tests/test-template.js")}]
         },
         fix:true,
         rulePaths:[path.resolve(__dirname,"../lib/rules")]

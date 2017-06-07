@@ -1,6 +1,6 @@
 /**
  * @fileoverview Tests for top rule
- * @author Nicholas Deis
+ * @author Nick Deis
  */
 const RuleTester = require("eslint/lib/testers/rule-tester"),
 rule = require("../../../lib/rules/notice"),
@@ -11,7 +11,7 @@ const templateFile = path.join(__dirname,"../../test-template.js");
 
 const template = fs.readFileSync(templateFile,"utf8");
 
-const mustMatch = "[0-9]{0,4}, Nicholas Deis";
+const mustMatch = "Copyright \\(c\\) [0-9]{0,4}, Nick Deis";
 
 
 const ruleTester = new RuleTester();
@@ -49,7 +49,7 @@ ruleTester.run("notice",rule,{
     valid:[{
         code:`
         /**
-         * Copyright (c) 2017, Nicholas Deis
+         * Copyright (c) 2017, Nick Deis
          * All rights reserved.
         */
         function stylin(){

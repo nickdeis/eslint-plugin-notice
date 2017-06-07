@@ -1,7 +1,7 @@
 {
   "name": "eslint-plugin-notice",
   "version": "0.0.1",
-  "description": "An eslint rule that checks the top comment and fixes it too!",
+  "description": "An eslint rule that checks the top of files and fixes it too!",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -18,7 +18,7 @@
     "header",
     "lint"
   ],
-  "author": "Nicholas Deis",
+  "author": "nickdeis",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^3.19.0"
