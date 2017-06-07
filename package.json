@@ -1,7 +1,7 @@
 {
   "name": "eslint-plugin-notice",
   "version": "0.0.1",
-  "description": "An eslint rule that checks the top of files and fixes it too!",
+  "description": "An eslint rule that checks the top of files and --fix them too!",
   "main": "index.js",
   "directories": {
     "test": "tests"
