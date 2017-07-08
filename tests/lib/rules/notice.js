@@ -11,7 +11,7 @@ const templateFile = path.join(__dirname,"../../test-template.js");
 
 const template = fs.readFileSync(templateFile,"utf8");
 
-const mustMatch = "Copyright \\(c\\) [0-9]{0,4}, Nick Deis";
+const mustMatch = /Copyright \(c\) [0-9]{0,4}, Nick Deis/;
 
 
 const ruleTester = new RuleTester();
@@ -38,12 +38,14 @@ ruleTester.run("notice",rule,{
         {
             code:noStyle,
             options:[{mustMatch,template}],
-            errors: [{ message: `Could not find a match for the mustMatch pattern`}]
+            errors: [{ message: `Could not find a match for the mustMatch pattern`}],
+            output:fs.readFileSync(__dirname+"/fix-result-1.js","utf8")
         },
         {
             code:notExact,
             options:[{mustMatch,template}],
-            errors:[{message:`Could not find a match for the mustMatch pattern`}]
+            errors:[{message:`Could not find a match for the mustMatch pattern`}],
+            output:fs.readFileSync(__dirname+"/fix-result-2.js","utf8")
         }
     ],
     valid:[{

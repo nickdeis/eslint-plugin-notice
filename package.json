@@ -1,13 +1,13 @@
 {
   "name": "eslint-plugin-notice",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "An eslint rule that checks the top of files and --fix them too!",
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "node tests/lib/rules/notice.js && node tests/cli-test.js"
+    "test": "node tests/lib/rules/notice.js"
   },
   "keywords": [
     "eslint",

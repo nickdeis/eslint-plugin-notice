@@ -35,10 +35,19 @@ module.exports = {
                 const resolvedTemplate = _.template(template)(allVars);
                 const sourceCode = context.getSourceCode();
                 const text = sourceCode.getText().substring(0, chars);
+                const firstComment = sourceCode.getAllComments()[0];
                 return {
                     Program(node) {
                         function fix(fixer) {
-                            return fixer.insertTextBefore(node, resolvedTemplate);
+                            let topNode;
+                            if(!firstComment){
+                                topNode=node;
+                            }else if(firstComment.loc.start.line <= node.loc.start.line){
+                                topNode=firstComment;
+                            }else{
+                                topNode=node;
+                            } 
+                            return fixer.insertTextBefore(topNode, resolvedTemplate);
                         }
                         if (!String(text).match(mustMatch)) {
                             const report = { node, message: `Could not find a match for the mustMatch pattern` };
