@@ -31,6 +31,10 @@ function noStyle(){
 }
 `;
 
+const issue3options = require(`${__dirname}/config-issue-2and3`);
+const issue3code = fs.readFileSync(`${__dirname}/sample-issue-3.js`,"utf8");
+
+const issue3 = {options:[issue3options],code:issue3code};
 
 
 ruleTester.run("notice",rule,{
@@ -59,5 +63,6 @@ ruleTester.run("notice",rule,{
         }
         `,
         options:[{mustMatch,template}]
-    }]
+    },
+    issue3]
 });
