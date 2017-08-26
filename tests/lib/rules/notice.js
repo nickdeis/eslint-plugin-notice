@@ -3,16 +3,15 @@
  * @author Nick Deis
  */
 const RuleTester = require("eslint/lib/testers/rule-tester"),
-rule = require("../../..").rules.notice,
-fs = require("fs"),
-path = require("path");
+  rule = require("../../..").rules.notice,
+  fs = require("fs"),
+  path = require("path");
 
-const templateFile = path.join(__dirname,"../../test-template.js");
+const templateFile = path.join(__dirname, "../../test-template.js");
 
-const template = fs.readFileSync(templateFile,"utf8");
+const template = fs.readFileSync(templateFile, "utf8");
 
 const mustMatch = /Copyright \(c\) [0-9]{0,4}, Nick Deis/;
-
 
 const ruleTester = new RuleTester();
 
@@ -31,29 +30,38 @@ function noStyle(){
 }
 `;
 
-const issue3options = require(`${__dirname}/config-issue-2and3`);
-const issue3code = fs.readFileSync(`${__dirname}/sample-issue-3.js`,"utf8");
+const COULD_NOT_FIND = `Could not find a match for the mustMatch pattern`;
+const REPORT_AND_SKIP = `Found a header comment which did not match the mustMatch pattern, skipping fix and reporting`;
 
-const issue3 = {options:[issue3options],code:issue3code};
-
-
-ruleTester.run("notice",rule,{
-    invalid:[
-        {
-            code:noStyle,
-            options:[{mustMatch,template}],
-            errors: [{ message: `Could not find a match for the mustMatch pattern`}],
-            output:fs.readFileSync(__dirname+"/fix-result-1.js","utf8")
-        },
-        {
-            code:notExact,
-            options:[{mustMatch,template}],
-            errors:[{message:`Could not find a match for the mustMatch pattern`}],
-            output:fs.readFileSync(__dirname+"/fix-result-2.js","utf8")
-        }
-    ],
-    valid:[{
-        code:`
+ruleTester.run("notice", rule, {
+  invalid: [
+    {
+      code: noStyle,
+      options: [{ mustMatch, template }],
+      errors: [{ message: COULD_NOT_FIND }],
+      output: fs.readFileSync(__dirname + "/fix-result-1.js", "utf8")
+    },
+    {
+      code: notExact,
+      options: [{ mustMatch, template }],
+      errors: [{ message: COULD_NOT_FIND }],
+      output: fs.readFileSync(__dirname + "/fix-result-2.js", "utf8")
+    },
+    {
+      code: notExact,
+      options: [{ mustMatch, template, onNonMatchingHeader: "replace" }],
+      errors: [{ message: COULD_NOT_FIND }],
+      output: fs.readFileSync(__dirname + "/fix-result-3.js", "utf8")
+    },
+    {
+      code: notExact,
+      options: [{ mustMatch, template, onNonMatchingHeader: "report" }],
+      errors: [{ message: REPORT_AND_SKIP }]
+    }
+  ],
+  valid: [
+    {
+      code: `
         /**
          * Copyright (c) 2017, Nick Deis
          * All rights reserved.
@@ -62,7 +70,7 @@ ruleTester.run("notice",rule,{
             return "I read the style guide, or eslint handled it for me";
         }
         `,
-        options:[{mustMatch,template}]
-    },
-    issue3]
+      options: [{ mustMatch, template }]
+    }
+  ]
 });
