@@ -57,7 +57,7 @@ or use a file
 |template|A lodash template that will be used to fix files they don't contain mustMatch |**Optional**|string|
 |templateFile|template will override this setting. A file which contains the template|**Optional**|string|
 |templateVars|The variables to be used with the lodash template, always contains the variable YEAR|{YEAR}|object|
-|[onNonMatchingHeader](#onNonMatchingHeader)|Action that should be taken when there is a header comment, but it does not match `mustMatch`|`"prepend"`|string|
+|[onNonMatchingHeader](#onnonmatchingheader)|Action that should be taken when there is a header comment, but it does not match `mustMatch`|`"prepend"`|string|
 
 ### onNonMatchingHeader
 
