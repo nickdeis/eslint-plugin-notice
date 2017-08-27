@@ -47,17 +47,53 @@ or use a file
 }
 ```
 
+or just use your template, eslint-plugin-notice will reverse into a pattern for `mustMatch`
+
+```json
+{
+    "notice/notice":["error",
+        {
+        "templateFile":"config/copyright.js"
+        }
+    ]
+}
+```
+
+Want a more expressive template? Add `templateVars` and `varRegexps`
+*config/copyright.js*
+```js
+/**
+ * Copyright (c) <%= YEAR %>, <%= NAME %>
+ */
+```
+```js
+{
+    "notice/notice":["error",
+        {
+        templateFile:"config/copyright.js",
+        //YEAR will still be added unless you add your own value
+        templateVars:{NAME:"Nick Deis"},
+        //The regexp for YEAR is /20\d{2}/ and is automatically added
+        varRegexps:{NAME:/(Nick|Nicholas) Deis/}
+        }
+    ]
+}
+```
+
 
 ## Options
 
 |Option|Description|Default/Required/Optional|Type|
 |------|-----------|----------------|----|
-|mustMatch|A pattern that must be present in the notice|**Required**|RegExp/string|
-|chars|The number of characters to check for the mustMatch pattern|1000|number|
-|template|A lodash template that will be used to fix files they don't contain mustMatch |**Optional**|string|
+|mustMatch|A pattern that must be present in the notice|**Required** unless `template` is set|RegExp/string|
+|template|A lodash template that will be used to fix files they don't contain mustMatch |**Optional** unless `mustMatch` is not set|string|
 |templateFile|template will override this setting. A file which contains the template|**Optional**|string|
-|templateVars|The variables to be used with the lodash template, always contains the variable YEAR|{YEAR}|object|
+|chars|The number of characters to check for the mustMatch pattern|`1000`|number|
+|templateVars|The variables to be used with the lodash template, always contains the variable YEAR|`{YEAR:new Date().getFullYear()}`|object|
 |[onNonMatchingHeader](#onnonmatchingheader)|Action that should be taken when there is a header comment, but it does not match `mustMatch`|`"prepend"`|string|
+|varRegexps|If `mustMatch` is not set and `template` is set, a regexp that will be replaced in the `template` to create a regexp for `mustMatch`|`{YEAR:/20\d{2}/}`|object|
+
+
 
 ### onNonMatchingHeader
 

@@ -5,7 +5,10 @@
 const RuleTester = require("eslint/lib/testers/rule-tester"),
   rule = require("../../..").rules.notice,
   fs = require("fs"),
-  path = require("path");
+  path = require("path"),
+  utils = require("../../../utils");
+
+const { COULD_NOT_FIND, REPORT_AND_SKIP, escapeRegExp } = utils;
 
 const templateFile = path.join(__dirname, "../../test-template.js");
 
@@ -30,8 +33,14 @@ function noStyle(){
 }
 `;
 
-const COULD_NOT_FIND = `Could not find a match for the mustMatch pattern`;
-const REPORT_AND_SKIP = `Found a header comment which did not match the mustMatch pattern, skipping fix and reporting`;
+const testCode4 = fs.readFileSync(__dirname + "/test-case-4.js", "utf8");
+
+const testCase4 = {
+  code: testCode4,
+  options: [{ template: fs.readFileSync(__dirname + "/test-template-4.js","utf8"), onNonMatchingHeader: "report" }],
+  errors: [{ message: REPORT_AND_SKIP }],
+  output: testCode4
+};
 
 ruleTester.run("notice", rule, {
   invalid: [
@@ -56,8 +65,10 @@ ruleTester.run("notice", rule, {
     {
       code: notExact,
       options: [{ mustMatch, template, onNonMatchingHeader: "report" }],
-      errors: [{ message: REPORT_AND_SKIP }]
-    }
+      errors: [{ message: REPORT_AND_SKIP }],
+      output: notExact
+    },
+    testCase4
   ],
   valid: [
     {
