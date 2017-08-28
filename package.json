@@ -1,13 +1,13 @@
 {
   "name": "eslint-plugin-notice",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "An eslint rule that checks the top of files and --fix them too!",
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "node tests/lib/rules/notice.js"
+    "test": "node tests/lib/rules/notice.js && node tests/test-utils.js"
   },
   "keywords": [
     "eslint",
@@ -25,7 +25,7 @@
     "eslint": ">=3.0.0"
   },
   "dependencies": {
-    "lodash": ">=1.0.0"
+    "lodash": ">=2.4.0"
   },
   "peerDependencies": {
     "eslint": ">=3.0.0"

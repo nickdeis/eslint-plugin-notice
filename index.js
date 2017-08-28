@@ -10,11 +10,16 @@ const fs = require("fs"),
   utils = require("./utils");
 
 const NON_MATCHING_HEADER_ACTIONS = ["prepend", "replace", "report"];
-const YEAR_REGEXP = /20\d{2}/;
-const { escapeRegExp } = utils;
+const { regexpizeTemplate } = utils;
+
+
 
 function resolveOptions({ mustMatch, templateFile, template, templateVars, chars, onNonMatchingHeader, varRegexps }) {
   onNonMatchingHeader = onNonMatchingHeader || "prepend";
+  templateVars = templateVars || {};
+  varRegexps = varRegexps || {};
+  chars = chars || 1000;
+
   let mustMatchTemplate = false;
   if (!mustMatch) {
     mustMatchTemplate = true;
@@ -26,16 +31,12 @@ function resolveOptions({ mustMatch, templateFile, template, templateVars, chars
     template = fs.readFileSync(templateFile, "utf8");
   }
 
-  templateVars = templateVars || {};
-  chars = chars || 1000;
   const YEAR = new Date().getFullYear();
   const allVars = Object.assign({}, { YEAR }, templateVars);
 
   if (mustMatchTemplate && template) {
     //create mustMatch from varRegexps and template
-    varRegexps = varRegexps || {};
-    const allRegexpVars = Object.assign({}, { YEAR: YEAR_REGEXP }, varRegexps);
-    mustMatch = new RegExp(_.template(escapeRegExp(template))(allRegexpVars));
+    mustMatch = regexpizeTemplate({ template, varRegexps });
   } else if (!template && mustMatchTemplate) {
     throw new Error("Either mustMatch, template, or templateFile must be set");
   }
@@ -71,6 +72,7 @@ module.exports = {
             } else {
               topNode = node;
             }
+            const headerMatches = !!String(text).match(mustMatch);
             //Select fixer based off onNonMatchingHeader
             let fix;
             //If there is no template, then there can be no fix.
@@ -83,7 +85,7 @@ module.exports = {
             } else if (hasHeaderComment && onNonMatchingHeader === "replace") {
               fix = fixer => fixer.replaceText(topNode, resolvedTemplate);
               //report and skip
-            } else if (hasHeaderComment && onNonMatchingHeader === "report") {
+            } else if (hasHeaderComment && onNonMatchingHeader === "report" && !headerMatches) {
               const report = {
                 node,
                 message: utils.REPORT_AND_SKIP
@@ -91,7 +93,7 @@ module.exports = {
               context.report(report);
               return;
             }
-            if (!String(text).match(mustMatch)) {
+            if (!headerMatches) {
               const report = { node, message: utils.COULD_NOT_FIND, fix };
               context.report(report);
               return;
