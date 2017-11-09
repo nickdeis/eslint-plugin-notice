@@ -82,6 +82,23 @@ ruleTester.run("notice", rule, {
         }
         `,
       options: [{ mustMatch, template }]
+    },
+    {
+      code:`
+      /**
+       * Copyright (c) 2017, Nick Deis
+       * All rights reserved.
+      */
+      function stylin(){
+          return "I'm a little off, but close enough";
+      }`,
+      options: [{ template,nonMatchingTolerance:.70 }]
+    },
+    {
+      code:`/* Copyright (c) 2014-present, Foo bar Inc. */`,
+      options:[{template:"/* Copyright (c) 2014-present, FooBar, Inc. */",nonMatchingTolerance:.70}]
     }
+
+
   ]
 });

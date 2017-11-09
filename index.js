@@ -7,42 +7,10 @@
 
 const fs = require("fs"),
   _ = require("lodash"),
-  utils = require("./utils");
+  utils = require("./utils"),
+  metriclcs = require("metric-lcs");
 
-const NON_MATCHING_HEADER_ACTIONS = ["prepend", "replace", "report"];
-const { regexpizeTemplate } = utils;
-
-
-
-function resolveOptions({ mustMatch, templateFile, template, templateVars, chars, onNonMatchingHeader, varRegexps }) {
-  onNonMatchingHeader = onNonMatchingHeader || "prepend";
-  templateVars = templateVars || {};
-  varRegexps = varRegexps || {};
-  chars = chars || 1000;
-
-  let mustMatchTemplate = false;
-  if (!mustMatch) {
-    mustMatchTemplate = true;
-  } else if (!(mustMatch instanceof RegExp)) {
-    mustMatch = new RegExp(mustMatch);
-  }
-
-  if (!template && templateFile) {
-    template = fs.readFileSync(templateFile, "utf8");
-  }
-
-  const YEAR = new Date().getFullYear();
-  const allVars = Object.assign({}, { YEAR }, templateVars);
-
-  if (mustMatchTemplate && template) {
-    //create mustMatch from varRegexps and template
-    mustMatch = regexpizeTemplate({ template, varRegexps });
-  } else if (!template && mustMatchTemplate) {
-    throw new Error("Either mustMatch, template, or templateFile must be set");
-  }
-  const resolvedTemplate = _.template(template)(allVars);
-  return { resolvedTemplate, mustMatch, chars, onNonMatchingHeader };
-}
+const { regexpizeTemplate, resolveOptions } = utils;
 
 module.exports = {
   rules: {
@@ -55,7 +23,9 @@ module.exports = {
         fixable: "code"
       },
       create(context) {
-        const { resolvedTemplate, mustMatch, chars, onNonMatchingHeader } = resolveOptions(context.options[0]);
+        const { resolvedTemplate, mustMatch, chars, onNonMatchingHeader, nonMatchingTolerance } = resolveOptions(
+          context.options[0]
+        );
         const sourceCode = context.getSourceCode();
         const text = sourceCode.getText().substring(0, chars);
         const firstComment = sourceCode.getAllComments()[0];
@@ -63,7 +33,6 @@ module.exports = {
           Program(node) {
             let topNode;
             let hasHeaderComment = false;
-            let applyFix = true;
             if (!firstComment) {
               topNode = node;
             } else if (firstComment.loc.start.line <= node.loc.start.line) {
@@ -72,7 +41,21 @@ module.exports = {
             } else {
               topNode = node;
             }
-            const headerMatches = !!String(text).match(mustMatch);
+            let headerMatches = false;
+            if(!headerMatches && mustMatch && text){
+              headerMatches = !!String(text).match(mustMatch);
+              //If the header matches, return early
+              if(headerMatches) return;
+            }            
+            //If chars doesn't match, a header comment/template exists and nonMatchingTolerance is set, try calculating string distance
+            if (!headerMatches && hasHeaderComment && resolvedTemplate && _.isNumber(nonMatchingTolerance)) {
+              const dist = metriclcs(resolvedTemplate,firstComment.value);
+              //Return early, mark as true for future work if needed
+              if(nonMatchingTolerance <= dist){
+                headerMatches = true;
+                return;
+              }
+            }
             //Select fixer based off onNonMatchingHeader
             let fix;
             //If there is no template, then there can be no fix.

@@ -24,7 +24,6 @@ const HEADERS = [header1, header2];
 function testRegepizeTemplate() {
   const varRegexps = { NAME: /(Nick|Nicholas) Deis/ };
   const mustMatch = regexpizeTemplate({ template, varRegexps });
-  console.log(mustMatch);
   HEADERS.forEach(header => {
     if (!header.match(mustMatch)) {
       throw new Error(`Expected ${header} to match ${mustMatch}`);

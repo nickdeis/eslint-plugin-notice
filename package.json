@@ -25,7 +25,8 @@
     "eslint": ">=3.0.0"
   },
   "dependencies": {
-    "lodash": ">=2.4.0"
+    "lodash": ">=2.4.0",
+    "metric-lcs": "^0.1.0"
   },
   "peerDependencies": {
     "eslint": ">=3.0.0"
