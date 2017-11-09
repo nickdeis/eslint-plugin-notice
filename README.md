@@ -91,7 +91,7 @@ Want a more expressive template? Add `templateVars` and `varRegexps`
 |chars|The number of characters to check for the `mustMatch` pattern|`1000`|number|
 |templateVars|The variables to be used with the lodash template, always contains the variable YEAR|`{YEAR:new Date().getFullYear()}`|object|
 |[onNonMatchingHeader](#onnonmatchingheader)|Action that should be taken when there is a header comment, but it does not match `mustMatch` or is less than `nonMatchingTolerance`|`"prepend"`|string|
-|nonMatchingTolerance|Optional fallback for `mustMatch` compares a non-matching header comment (if it exists) to the resolved template using [Metric Longest Common Subsequence](http://heim.ifi.uio.no/~danielry/StringMetric.pdf). `1` means the strings must be exactly the same, where anything less is varying degrees of dissimiliar. `.70` seems like a good choice|**Optional**|number between 0 and 1|
+|nonMatchingTolerance|Optional fallback for `mustMatch`. Compares a non-matching header comment (if it exists) to the resolved template using [Metric Longest Common Subsequence](http://heim.ifi.uio.no/~danielry/StringMetric.pdf). `1` means the strings must be exactly the same, where anything less is varying degrees of dissimiliar. `.70` seems like a good choice|**Optional**|number between 0 and 1|
 |varRegexps|If `mustMatch` is not set and `template` is set, a regexp that will be replaced in the `template` to create a regexp for `mustMatch`|`{YEAR:/20\d{2}/}`|object|
 
 
