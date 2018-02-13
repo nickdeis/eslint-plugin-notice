@@ -3,7 +3,8 @@
  */
 
 const _ = require("lodash"),
-  fs = require("fs");
+  fs = require("fs"),
+  path = require('path');
 
 const COULD_NOT_FIND = `Could not find a match for the mustMatch pattern`;
 const REPORT_AND_SKIP = `Found a header comment which did not match the mustMatch pattern, skipping fix and reporting`;
@@ -50,7 +51,7 @@ function resolveOptions({
   }
 
   if (!template && templateFile) {
-    template = fs.readFileSync(templateFile, "utf8");
+    template = fs.readFileSync(path.resolve(templateFile), "utf8");
   }
 
   const YEAR = new Date().getFullYear();
