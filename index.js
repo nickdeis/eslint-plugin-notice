@@ -24,7 +24,8 @@ module.exports = {
       },
       create(context) {
         const { resolvedTemplate, mustMatch, chars, onNonMatchingHeader, nonMatchingTolerance } = resolveOptions(
-          context.options[0]
+          context.options[0],
+          context.getFilename()
         );
         const sourceCode = context.getSourceCode();
         const text = sourceCode.getText().substring(0, chars);
@@ -42,16 +43,16 @@ module.exports = {
               topNode = node;
             }
             let headerMatches = false;
-            if(!headerMatches && mustMatch && text){
+            if (!headerMatches && mustMatch && text) {
               headerMatches = !!String(text).match(mustMatch);
               //If the header matches, return early
-              if(headerMatches) return;
-            }            
+              if (headerMatches) return;
+            }
             //If chars doesn't match, a header comment/template exists and nonMatchingTolerance is set, try calculating string distance
             if (!headerMatches && hasHeaderComment && resolvedTemplate && _.isNumber(nonMatchingTolerance)) {
-              const dist = metriclcs(resolvedTemplate,firstComment.value);
+              const dist = metriclcs(resolvedTemplate, firstComment.value);
               //Return early, mark as true for future work if needed
-              if(nonMatchingTolerance <= dist){
+              if (nonMatchingTolerance <= dist) {
                 headerMatches = true;
                 return;
               }

@@ -1,6 +1,6 @@
 
 /**
- * Copyright (c) 2017, Nick Deis
+ * Copyright (c) 2018, Nick Deis
  */
 
 function noStyle(){
