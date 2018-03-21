@@ -62,9 +62,9 @@ module.exports = {
             //If there is no template, then there can be no fix.
             if (!resolvedTemplate) {
               fix = undefined;
-              //If it has no header comment or onNonMatchingHeader is set to prepend, prepend to the topNode
+              //If it has no header comment or onNonMatchingHeader is set to prepend, insert at byte 0
             } else if (!hasHeaderComment || (hasHeaderComment && onNonMatchingHeader === "prepend")) {
-              fix = fixer => fixer.insertTextBefore(topNode, resolvedTemplate);
+              fix = fixer => fixer.insertTextBeforeRange([0, 0], resolvedTemplate);
               //replace header comment
             } else if (hasHeaderComment && onNonMatchingHeader === "replace") {
               fix = fixer => fixer.replaceText(topNode, resolvedTemplate);
