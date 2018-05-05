@@ -127,5 +127,5 @@ The three configurable messages are:
 
 * **whenFailedToMatch**: When the header fails to match the `mustMatch` pattern.
 * **reportAndSkip**: When using `"onNonMatchingHeader":"report"` and a non-matching notice is found.
-* **whenOutsideTolerance**: When you using `nonMatchingTolerance` to check for notice similarity and it fails to be similar enough. Passes in `similarity` as a template variable (eg `"whenOutsideTolerance":"The similarity is {{ similarity }}"`)
+* **whenOutsideTolerance**: When you using `nonMatchingTolerance` to check for notice similarity and it fails to be similar enough. Passes in `similarity` as a template variable (eg `"The similarity is {{ similarity }}"`)
 
