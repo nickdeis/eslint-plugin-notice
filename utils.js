@@ -7,8 +7,15 @@ const _ = require("lodash"),
   findRoot = require("find-root"),
   path = require("path");
 
-const COULD_NOT_FIND = `Could not find a match for the mustMatch pattern`;
-const REPORT_AND_SKIP = `Found a header comment which did not match the mustMatch pattern, skipping fix and reporting`;
+const COULD_NOT_FIND = `Missing notice header`;
+const REPORT_AND_SKIP = `Found a header comment which did not have a notice header, skipping fix and reporting`;
+const OUTSIDE_TOLERANCE = `Found a header comment which was too different from the required notice header (similarity={{ similarity }})`;
+
+const DEFAULT_MESSAGE_CONFIG = {
+  whenFailedToMatch: COULD_NOT_FIND,
+  reportAndSkip: REPORT_AND_SKIP,
+  whenOutsideTolerance: OUTSIDE_TOLERANCE
+};
 
 const ESCAPE = /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g;
 const YEAR_REGEXP = /20\d{2}/;
@@ -29,32 +36,41 @@ function regexpizeTemplate({ template, varRegexps }) {
 }
 
 function resolveTemplate({ templateFile, template, fileName }) {
-  
-  if(template) return template;
-  if(!templateFile){
+  if (template) return template;
+  if (!templateFile) {
     throw new Error(`Either template or templateFile must be set`);
   }
   //Naively look for the templateFile first
-  if(fs.existsSync(templateFile)){
+  if (fs.existsSync(templateFile)) {
     return fs.readFileSync(templateFile, "utf8");
   }
-  if(!fs.existsSync(fileName)){
+  if (!fs.existsSync(fileName)) {
     throw new Error(`Could not find the file name ${fileName}. This is necessary to find the root`);
   }
   const root = findRoot(fileName);
-  const rootTemplateFile = path.join(root,templateFile);
-  if(fs.existsSync(rootTemplateFile)){
+  const rootTemplateFile = path.join(root, templateFile);
+  if (fs.existsSync(rootTemplateFile)) {
     return fs.readFileSync(rootTemplateFile, "utf8");
   }
   const absRootTemplateFile = path.resolve(rootTemplateFile);
-  if(fs.existsSync(absRootTemplateFile)){
-    return fs.readFileSync(absRootTemplateFile,"utf8");
+  if (fs.existsSync(absRootTemplateFile)) {
+    return fs.readFileSync(absRootTemplateFile, "utf8");
   }
   throw new Error(`Can't find templateFile @ ${absRootTemplateFile}`);
 }
 
 function resolveOptions(
-  { mustMatch, templateFile, template, templateVars, chars, onNonMatchingHeader, varRegexps, nonMatchingTolerance },
+  {
+    mustMatch,
+    templateFile,
+    template,
+    templateVars,
+    chars,
+    onNonMatchingHeader,
+    varRegexps,
+    nonMatchingTolerance,
+    messages
+  },
   fileName
 ) {
   onNonMatchingHeader = onNonMatchingHeader || "prepend";
@@ -62,6 +78,7 @@ function resolveOptions(
   varRegexps = varRegexps || {};
   chars = chars || 1000;
   nonMatchingTolerance = nonMatchingTolerance || null;
+  messages = _.assign({}, DEFAULT_MESSAGE_CONFIG, messages || {});
 
   let mustMatchTemplate = false;
   if (!mustMatch) {
@@ -82,7 +99,19 @@ function resolveOptions(
   }
   const resolvedTemplate = _.template(template)(allVars);
 
-  return { resolvedTemplate, mustMatch, chars, onNonMatchingHeader, nonMatchingTolerance };
+  return { resolvedTemplate, mustMatch, chars, onNonMatchingHeader, nonMatchingTolerance, messages };
 }
 
-module.exports = { regexpizeTemplate, COULD_NOT_FIND, REPORT_AND_SKIP, resolveOptions };
+function createFixer({ resolvedTemplate, hasHeaderComment, topNode, onNonMatchingHeader }) {
+  if (!resolvedTemplate) {
+    return undefined;
+  }
+  if (!hasHeaderComment || (hasHeaderComment && onNonMatchingHeader === "prepend")) {
+    return fixer => fixer.insertTextBeforeRange([0, 0], resolvedTemplate);
+  }
+  if (hasHeaderComment && onNonMatchingHeader === "replace") {
+    return fixer => fixer.replaceText(topNode, resolvedTemplate);
+  }
+}
+
+module.exports = { createFixer, regexpizeTemplate, COULD_NOT_FIND, REPORT_AND_SKIP, resolveOptions };

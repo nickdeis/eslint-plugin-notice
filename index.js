@@ -10,7 +10,7 @@ const fs = require("fs"),
   utils = require("./utils"),
   metriclcs = require("metric-lcs");
 
-const { regexpizeTemplate, resolveOptions } = utils;
+const { regexpizeTemplate, resolveOptions, createFixer } = utils;
 
 module.exports = {
   rules: {
@@ -23,10 +23,15 @@ module.exports = {
         fixable: "code"
       },
       create(context) {
-        const { resolvedTemplate, mustMatch, chars, onNonMatchingHeader, nonMatchingTolerance } = resolveOptions(
-          context.options[0],
-          context.getFilename()
-        );
+        const {
+          resolvedTemplate,
+          mustMatch,
+          chars,
+          onNonMatchingHeader,
+          nonMatchingTolerance,
+          messages
+        } = resolveOptions(context.options[0], context.getFilename());
+
         const sourceCode = context.getSourceCode();
         const text = sourceCode.getText().substring(0, chars);
         const firstComment = sourceCode.getAllComments()[0];
@@ -55,30 +60,31 @@ module.exports = {
               if (nonMatchingTolerance <= dist) {
                 headerMatches = true;
                 return;
+              } else {
+                const fix = createFixer({ resolvedTemplate, hasHeaderComment, topNode, onNonMatchingHeader });
+                const report = {
+                  node,
+                  message: messages.whenOutsideTolerance,
+                  fix,
+                  data: { similarity: Math.round(dist * 1000) / 1000 }
+                };
+                context.report(report);
+                return;
               }
             }
-            //Select fixer based off onNonMatchingHeader
-            let fix;
-            //If there is no template, then there can be no fix.
-            if (!resolvedTemplate) {
-              fix = undefined;
-              //If it has no header comment or onNonMatchingHeader is set to prepend, insert at byte 0
-            } else if (!hasHeaderComment || (hasHeaderComment && onNonMatchingHeader === "prepend")) {
-              fix = fixer => fixer.insertTextBeforeRange([0, 0], resolvedTemplate);
-              //replace header comment
-            } else if (hasHeaderComment && onNonMatchingHeader === "replace") {
-              fix = fixer => fixer.replaceText(topNode, resolvedTemplate);
-              //report and skip
-            } else if (hasHeaderComment && onNonMatchingHeader === "report" && !headerMatches) {
+            //report and skip
+            if (hasHeaderComment && onNonMatchingHeader === "report" && !headerMatches) {
               const report = {
                 node,
-                message: utils.REPORT_AND_SKIP
+                message: messages.reportAndSkip
               };
               context.report(report);
               return;
             }
+            //Select fixer based off onNonMatchingHeader
+            const fix = createFixer({ resolvedTemplate, hasHeaderComment, topNode, onNonMatchingHeader });
             if (!headerMatches) {
-              const report = { node, message: utils.COULD_NOT_FIND, fix };
+              const report = { node, message: messages.whenFailedToMatch, fix };
               context.report(report);
               return;
             }
