@@ -1,6 +1,6 @@
 
 /**
- * Copyright (c) 2018, Nick Deis
+ * Copyright (c) 2019, Nick Deis
  */
 
 

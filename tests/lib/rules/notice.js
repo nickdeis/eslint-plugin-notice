@@ -33,6 +33,12 @@ function noStyle(){
 }
 `;
 
+const noStyle2 = `
+function noStyle2(){
+    return "I didn't read the style guide :(";
+}
+`;
+
 const testCode4 = fs.readFileSync(__dirname + "/test-case-4.js", "utf8");
 
 const testCase4 = {
@@ -85,10 +91,14 @@ ruleTester.run("notice", rule, {
     //test configurable messages
     {
       code: noStyle,
-      options: [{ mustMatch, template, messages:{whenFailedToMatch:"Custom message"} }],
+      options: [{ mustMatch, template, messages: { whenFailedToMatch: "Custom message" } }],
       errors: [{ message: "Custom message" }],
-      output: fs.readFileSync(__dirname + "/fix-result-1.js", "utf8")    
-    }
+      output: fs.readFileSync(__dirname + "/fix-result-1.js", "utf8")
+    },
+    /**
+     * Test the case where no template file is set, should COULD_NOT_FIND error with no autofixes suggested
+     */
+    { code: noStyle2, options: [{ mustMatch }], errors: [{ message: COULD_NOT_FIND }], output: null }
   ],
   valid: [
     {

@@ -37,9 +37,8 @@ function regexpizeTemplate({ template, varRegexps }) {
 
 function resolveTemplate({ templateFile, template, fileName }) {
   if (template) return template;
-  if (!templateFile) {
-    throw new Error(`Either template or templateFile must be set`);
-  }
+  //No template file, so move foward and disable --fix
+  if (!templateFile) return null;
   //Naively look for the templateFile first
   if (fs.existsSync(templateFile)) {
     return fs.readFileSync(templateFile, "utf8");
