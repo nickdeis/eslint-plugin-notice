@@ -2,7 +2,7 @@
  * @fileoverview Tests for top rule
  * @author Nick Deis
  */
-const RuleTester = require("eslint/lib/testers/rule-tester"),
+const RuleTester = require("eslint").RuleTester,
   rule = require("../../..").rules.notice,
   fs = require("fs"),
   path = require("path"),

@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-notice",
-  "version": "0.8.9",
+  "version": "0.8.10",
   "description": "An eslint rule that checks the top of files and --fix them too!",
   "main": "index.js",
   "directories": {
@@ -22,7 +22,7 @@
   "author": "nickdeis",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^4.19.1"
+    "eslint": "^6.8.0"
   },
   "dependencies": {
     "find-root": "^1.1.0",
