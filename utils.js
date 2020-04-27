@@ -86,17 +86,18 @@ function resolveOptions(
     mustMatch = new RegExp(mustMatch);
   }
   template = resolveTemplate({ templateFile, template, fileName });
-
+  if(typeof template === 'string'){
+    template = template.replace(/\r\n/g, "\n");
+  }
   const YEAR = new Date().getFullYear();
   const allVars = Object.assign({}, { YEAR }, templateVars);
-
   if (mustMatchTemplate && template) {
     //create mustMatch from varRegexps and template
     mustMatch = regexpizeTemplate({ template, varRegexps });
   } else if (!template && mustMatchTemplate) {
     throw new Error("Either mustMatch, template, or templateFile must be set");
   }
-  const resolvedTemplate = _.template(template)(allVars);
+  const resolvedTemplate = _.template(template)(allVars).replace(/\r\n/g, "\n");
 
   return { resolvedTemplate, mustMatch, chars, onNonMatchingHeader, nonMatchingTolerance, messages };
 }

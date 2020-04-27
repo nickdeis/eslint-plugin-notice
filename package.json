@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "node tests/lib/rules/notice.js && node tests/test-utils.js"
+    "test": "node tests/lib/rules/notice.js && node tests/test-utils.js && mocha staging"
   },
   "keywords": [
     "eslint",
@@ -22,7 +22,9 @@
   "author": "nickdeis",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^6.8.0"
+    "eslint": "^6.8.0",
+    "eslint-plugin-self": "^1.2.0",
+    "mocha": "^7.1.2"
   },
   "dependencies": {
     "find-root": "^1.1.0",

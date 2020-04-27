@@ -49,7 +49,7 @@ module.exports = {
             }
             let headerMatches = false;
             if (!headerMatches && mustMatch && text) {
-              headerMatches = !!String(text).match(mustMatch);
+              headerMatches = !!(String(text).replace(/\r\n/g, "\n")).match(mustMatch);
               //If the header matches, return early
               if (headerMatches) return;
             }
