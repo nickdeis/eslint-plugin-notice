@@ -55,25 +55,32 @@ function createToleranceTestCase(nonMatchingTolerance) {
   };
 }
 
+/**
+ * Since we norm the output of templates, we need to norm the expected output of --fix
+ */
+function readAndNormalize(rpath){
+  return fs.readFileSync(__dirname + rpath, "utf8").replace(/\r\n/g, "\n");
+}
+
 ruleTester.run("notice", rule, {
   invalid: [
     {
       code: noStyle,
       options: [{ mustMatch, template }],
       errors: [{ message: COULD_NOT_FIND }],
-      output: fs.readFileSync(__dirname + "/fix-result-1.js", "utf8")
+      output: readAndNormalize("/fix-result-1.js")
     },
     {
       code: notExact,
       options: [{ mustMatch, template }],
       errors: [{ message: COULD_NOT_FIND }],
-      output: fs.readFileSync(__dirname + "/fix-result-2.js", "utf8")
+      output: readAndNormalize("/fix-result-2.js")
     },
     {
       code: notExact,
       options: [{ mustMatch, template, onNonMatchingHeader: "replace" }],
       errors: [{ message: COULD_NOT_FIND }],
-      output: fs.readFileSync(__dirname + "/fix-result-3.js", "utf8")
+      output: readAndNormalize("/fix-result-3.js")
     },
     {
       code: notExact,
@@ -93,7 +100,7 @@ ruleTester.run("notice", rule, {
       code: noStyle,
       options: [{ mustMatch, template, messages: { whenFailedToMatch: "Custom message" } }],
       errors: [{ message: "Custom message" }],
-      output: fs.readFileSync(__dirname + "/fix-result-1.js", "utf8")
+      output: readAndNormalize("/fix-result-1.js")
     },
     /**
      * Test the case where no template file is set, should COULD_NOT_FIND error with no autofixes suggested
