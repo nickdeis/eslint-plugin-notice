@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/nickdeis/eslint-plugin-notice.svg)](https://travis-ci.org/nickdeis/eslint-plugin-notice)
 # eslint-plugin-notice
 
 An eslint rule that checks the top of files and `--fix` them too!
