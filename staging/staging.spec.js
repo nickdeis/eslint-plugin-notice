@@ -17,9 +17,18 @@ const textLF = `/**
 function x(){
     return 1;
 }
-`
+`;
+
+//TODO: Test fix
+
+const textLFNoHeader = `
+function x(){
+  return 1;
+}
+`;
 
 const textCRLF = textLF.replace(/\n/g,"\r\n");
+const textCRLFNoHeader = textLFNoHeader.replace(/\n/g,"\r\n");
 
 describe("Staging", () => {
   describe("Line ending control character testing", () => {
@@ -38,6 +47,15 @@ describe("Staging", () => {
     it("Should work on LF text", () => {
       const report = cli.executeOnText(textLF);
       assert.equal(report.errorCount,0);    
+    });
+    const clifix = new CLIEngine(Object.assign({},LINE_ENDING_CONFIG,{fix:true}));
+    it("Should correctly fix CRLF",() => {
+      const report = clifix.executeOnText(textCRLFNoHeader);
+      assert.equal(report.errorCount,0);  
+    });
+    it("Should correctly fix LF",() => {
+      const report = clifix.executeOnText(textLFNoHeader);
+      assert.equal(report.errorCount,0);  
     });
   });
 });
