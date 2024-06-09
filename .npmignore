@@ -3,3 +3,5 @@ tests/*
 *.log
 /tmp/
 staging/
+.travis.yml
+.eslintrc
