@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/nickdeis/eslint-plugin-notice/actions/workflows/main/badge.svg)](https://github.com/nickdeis/eslint-plugin-notice/actions/workflows/main/badge.svg)
+[![Build Status](https://github.com/nickdeis/eslint-plugin-notice/actions/workflows/main.yml/badge.svg)](https://github.com/nickdeis/eslint-plugin-notice/actions/workflows/main/badge.svg)
 
 # eslint-plugin-notice
 
