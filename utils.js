@@ -77,7 +77,7 @@ function resolveOptions(
   varRegexps = varRegexps || {};
   chars = chars || 1000;
   nonMatchingTolerance = nonMatchingTolerance || null;
-  messages = _.assign({}, DEFAULT_MESSAGE_CONFIG, messages || {});
+  messages = Object.assign({}, DEFAULT_MESSAGE_CONFIG, messages || {});
 
   let mustMatchTemplate = false;
   if (!mustMatch) {

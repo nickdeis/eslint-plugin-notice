@@ -10,9 +10,13 @@ const fs = require("fs"),
   utils = require("./utils"),
   metriclcs = require("metric-lcs");
 
-const { regexpizeTemplate, resolveOptions, createFixer } = utils;
+const {  resolveOptions, createFixer } = utils;
 
 module.exports = {
+  meta: {
+    name: "eslint-plugin-notice",
+    version: "1.0.0-eslint9"
+  },
   rules: {
     notice: {
       meta: {
@@ -20,7 +24,8 @@ module.exports = {
           description: "An eslint rule that checks the top of files and --fix them too!",
           category: "Stylistic Issues"
         },
-        fixable: "code"
+        fixable: "code",
+        schema: false
       },
       create(context) {
         const {

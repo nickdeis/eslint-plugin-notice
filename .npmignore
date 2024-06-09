@@ -2,3 +2,6 @@ tests/*
 /node_modules/
 *.log
 /tmp/
+staging/
+.travis.yml
+.eslintrc
