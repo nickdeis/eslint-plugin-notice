@@ -15,7 +15,7 @@ const {  resolveOptions, createFixer } = utils;
 module.exports = {
   meta: {
     name: "eslint-plugin-notice",
-    version: "1.0.0-eslint9"
+    version: "1.0.0"
   },
   rules: {
     notice: {
