@@ -1,4 +1,4 @@
-name: Main test pipeline
+name: Tests
 
 on:
   push:
