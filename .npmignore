@@ -5,3 +5,5 @@ tests/*
 staging/
 .travis.yml
 .eslintrc
+.github/
+.eslintrc
