@@ -2,10 +2,10 @@
  * Copyright (c) 2024, Nick Deis
  */
 
-import { RuleTester, TestCaseError } from "@typescript-eslint/rule-tester";
-import * as vitest from "vitest";
-import { noticeRule } from "../../src/rules/notice.js";
+import { TestCaseError } from "@typescript-eslint/rule-tester";
 import { DefaultMessages } from "../../src/config/index.js";
+import { noticeRule } from "../../src/rules/notice.js";
+import { runAll } from "../runners.js";
 import { readAndNormalize, templateFile } from "../utils/files.js";
 
 const notExact = `
@@ -80,18 +80,10 @@ function expectMessage(message: string | keyof typeof DefaultMessages): TestCase
   ] as never;
 }
 
-// Map vitest to RuleTester
-RuleTester.afterAll = vitest.afterAll;
-RuleTester.it = vitest.it;
-RuleTester.itOnly = vitest.it.only;
-RuleTester.describe = vitest.describe;
-
-const ruleTester = new RuleTester();
-
 const template = templateFile("basic");
 const mustMatch = /Copyright \(c\) [0-9]{0,4}, Nick Deis/;
 
-ruleTester.run("notice", noticeRule, {
+runAll("notice", noticeRule, {
   invalid: [
     {
       name: "Prepends the template before any code",
