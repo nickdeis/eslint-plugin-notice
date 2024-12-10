@@ -4,6 +4,6 @@
  */
 
 
-function leastYouTried(){
-    return false;
+function leastYouTried() {
+  return false;
 }

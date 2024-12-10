@@ -6,6 +6,6 @@
 /**
  * Not exactly what I was looking for
  */
-function leastYouTried(){
-    return false;
+function leastYouTried() {
+  return false;
 }
