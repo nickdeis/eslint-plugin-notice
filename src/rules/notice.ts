@@ -2,7 +2,7 @@
  * Copyright (c) 2024, Nick Deis
  */
 
-import { ReportFixFunction } from "@typescript-eslint/utils/ts-eslint";
+import type { ReportFixFunction } from "@typescript-eslint/utils/ts-eslint";
 import { isNumber } from "lodash";
 import metriclcs from "metric-lcs";
 import { resolveOptions } from "../config";
@@ -11,7 +11,8 @@ import { createFixer, createRule, normalizeLineEndings } from "../utils";
 export const noticeRule = createRule({
   meta: {
     docs: {
-      description: "An eslint rule that checks the top of files and --fix them too!",
+      description:
+        "An eslint rule that checks the top of files and --fix them too!",
       category: "Stylistic Issues",
     },
     messages: {},
@@ -22,10 +23,14 @@ export const noticeRule = createRule({
   defaultOptions: [] as never,
   name: "notice",
   create(context) {
-    const { chars, mustMatch, template, onNonMatchingHeader, nonMatchingTolerance, messages } = resolveOptions(
-      context.options[0],
-      context.filename,
-    );
+    const {
+      chars,
+      mustMatch,
+      template,
+      onNonMatchingHeader,
+      nonMatchingTolerance,
+      messages,
+    } = resolveOptions(context.options[0], context.filename);
 
     const sourceCode = context.getSourceCode(); // eslint v6/v7 don't have `sourceCode`
     const text = sourceCode.getText().substring(0, chars);
@@ -42,10 +47,19 @@ export const noticeRule = createRule({
          *
          * @see https://github.com/typescript-eslint/typescript-eslint/issues/4917
          */
-        const report = ({ message, fix, data }: { message: string; fix?: ReportFixFunction; data?: object }) =>
-          context.report({ message, fix, data, node } as never);
+        const report = ({
+          message,
+          fix,
+          data,
+        }: {
+          message: string;
+          fix?: ReportFixFunction;
+          data?: object;
+        }) => context.report({ message, fix, data, node } as never);
 
-        const hasHeaderComment = firstComment !== undefined && firstComment.loc.start.line <= node.loc.start.line;
+        const hasHeaderComment =
+          firstComment !== undefined &&
+          firstComment.loc.start.line <= node.loc.start.line;
         const topNode = hasHeaderComment ? firstComment : node;
 
         if (mustMatch && text) {
@@ -60,7 +74,12 @@ export const noticeRule = createRule({
           // Header is within tolerance, so we consider it a match
           if (nonMatchingTolerance <= dist) return;
 
-          const fix = createFixer(hasHeaderComment, topNode, onNonMatchingHeader, template);
+          const fix = createFixer(
+            hasHeaderComment,
+            topNode,
+            onNonMatchingHeader,
+            template
+          );
           return report({
             message: messages.whenOutsideTolerance,
             fix,
@@ -74,7 +93,12 @@ export const noticeRule = createRule({
         }
 
         // Select fixer based off onNonMatchingHeader
-        const fix = createFixer(hasHeaderComment, topNode, onNonMatchingHeader, template);
+        const fix = createFixer(
+          hasHeaderComment,
+          topNode,
+          onNonMatchingHeader,
+          template
+        );
         return report({ message: messages.whenFailedToMatch, fix });
       },
     };

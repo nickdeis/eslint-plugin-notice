@@ -4,7 +4,7 @@
 
 import { rules } from "./rules/index.js";
 import { name, version } from "../package.json";
-import { TSESLint } from "@typescript-eslint/utils";
+import type { TSESLint } from "@typescript-eslint/utils";
 
 const plugin = {
   configs: {

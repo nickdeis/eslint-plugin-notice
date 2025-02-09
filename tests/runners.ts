@@ -2,10 +2,13 @@
  * Copyright (c) 2024, Nick Deis
  */
 
-import { InvalidTestCase, RuleTester, RunTests, ValidTestCase } from "@typescript-eslint/rule-tester";
+import {
+  InvalidTestCase,
+  RuleTester,
+  RunTests,
+  ValidTestCase,
+} from "@typescript-eslint/rule-tester";
 import type { AnyRuleModule } from "@typescript-eslint/utils/ts-eslint";
-import { RuleTester as RuleTester6 } from "eslint6";
-import { RuleTester as RuleTester7 } from "eslint7";
 import { RuleTester as RuleTester8 } from "eslint8";
 import { omit } from "lodash";
 import * as vitest from "vitest";
@@ -18,8 +21,6 @@ RuleTester.itOnly = vitest.it.only;
 RuleTester.describe = vitest.describe;
 
 const RULE_TESTERS = {
-  "6": new RuleTester6(),
-  "7": new RuleTester7(),
   "8": new RuleTester8(),
   "9": new RuleTester(),
 } as const;
@@ -38,9 +39,10 @@ const RULE_TESTERS = {
  *
  * @returns An object with the name seperated from the test case.
  */
-function convertTestCase<T extends ValidTestCase<Options> | InvalidTestCase<never, Options>, Options extends unknown[]>(
-  testCase: T | string,
-) {
+function convertTestCase<
+  T extends ValidTestCase<Options> | InvalidTestCase<never, Options>,
+  Options extends unknown[]
+>(testCase: T | string) {
   if (typeof testCase === "string") {
     throw new Error(`Invalid test case specified: ${testCase}`);
   }
@@ -65,7 +67,9 @@ function convertTestCase<T extends ValidTestCase<Options> | InvalidTestCase<neve
  *
  * @returns A mapped version of runtests from {@link convertTestCase}.
  */
-function prepareTestCases<T extends readonly unknown[]>(test: RunTests<never, T>) {
+function prepareTestCases<T extends readonly unknown[]>(
+  test: RunTests<never, T>
+) {
   const valid = test.valid.map(convertTestCase);
   const invalid = test.invalid.map(convertTestCase);
 
@@ -89,7 +93,11 @@ function prepareTestCases<T extends readonly unknown[]>(test: RunTests<never, T>
  * @param rule The rule itself to test.
  * @param testCase A mapping of test cases to run.
  */
-export function runAll(ruleName: string, rule: AnyRuleModule, testCase: RunTests<never, readonly unknown[]>) {
+export function runAll(
+  ruleName: string,
+  rule: AnyRuleModule,
+  testCase: RunTests<never, readonly unknown[]>
+) {
   const testers = Object.entries(RULE_TESTERS);
   const cases = prepareTestCases(testCase);
 
