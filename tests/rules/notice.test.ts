@@ -7,6 +7,7 @@ import { DefaultMessages } from "../../src/config/index.js";
 import { noticeRule } from "../../src/rules/notice.js";
 import { runAll } from "../runners.js";
 import { readAndNormalize, templateFile } from "../utils/files.js";
+import { normalizeLineEndings } from "../../src/utils/strings.js";
 
 const notExact = `
 /**
@@ -72,10 +73,13 @@ function resultFile(name: string) {
  *
  * @see https://github.com/typescript-eslint/typescript-eslint/issues/4917
  */
-function expectMessage(message: string | keyof typeof DefaultMessages): TestCaseError<never>[] {
+function expectMessage(
+  message: string | keyof typeof DefaultMessages
+): TestCaseError<never>[] {
   return [
     {
-      message: DefaultMessages[message as keyof typeof DefaultMessages] ?? message,
+      message:
+        DefaultMessages[message as keyof typeof DefaultMessages] ?? message,
     },
   ] as never;
 }
@@ -148,13 +152,19 @@ runAll("notice", noticeRule, {
       ...createToleranceTestCase(0.9),
       name: "Matches templates according to tolerance",
       errors: expectMessage(
-        "Found a header comment which was too different from the required notice header (similarity=0.87)",
+        "Found a header comment which was too different from the required notice header (similarity=0.87)"
       ),
     },
     {
       name: "Uses user provided messages",
       code: noStyle,
-      options: [{ mustMatch, template, messages: { whenFailedToMatch: "Custom message" } }],
+      options: [
+        {
+          mustMatch,
+          template,
+          messages: { whenFailedToMatch: "Custom message" },
+        },
+      ],
       errors: expectMessage("Custom message"),
       output: resultFile("fix-result-1"),
     },

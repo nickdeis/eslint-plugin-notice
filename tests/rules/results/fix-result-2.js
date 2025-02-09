@@ -1,7 +1,6 @@
 /**
- * Copyright (c) 2024, Nick Deis
+ * Copyright (c) 2025, Nick Deis
  */
-
 
 /**
  * Not exactly what I was looking for

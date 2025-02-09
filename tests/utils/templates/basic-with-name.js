@@ -1,4 +1,3 @@
 /**
  * Copyright (c) <%= YEAR %>, <%= NAME %>
  */
-

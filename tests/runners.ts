@@ -118,6 +118,7 @@ export function runAll(
       describe("invalid", () => {
         for (const { name, test } of cases.invalid) {
           it(name, () => {
+            console.log(test);
             ruleTester.run(ruleName, rule as never, {
               valid: [],
               // Older test cases could have errors strings, but we can't anymore so it doesn't matter
