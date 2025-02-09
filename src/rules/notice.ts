@@ -2,11 +2,11 @@
  * Copyright (c) 2024, Nick Deis
  */
 
-import { createFixer, createRule, normalizeLineEndings } from "../utils";
+import { ReportFixFunction } from "@typescript-eslint/utils/ts-eslint";
 import { isNumber } from "lodash";
 import metriclcs from "metric-lcs";
-import { ReportFixFunction } from "@typescript-eslint/utils/ts-eslint";
 import { resolveOptions } from "../config";
+import { createFixer, createRule, normalizeLineEndings } from "../utils";
 
 export const noticeRule = createRule({
   meta: {
@@ -27,8 +27,8 @@ export const noticeRule = createRule({
       context.filename,
     );
 
-    const sourceCode = context.sourceCode;
-    const text = sourceCode.text.substring(0, chars);
+    const sourceCode = context.getSourceCode(); // eslint v6/v7 don't have `sourceCode`
+    const text = sourceCode.getText().substring(0, chars);
     const firstComment = sourceCode.getAllComments().at(0);
 
     return {
