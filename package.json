@@ -1,13 +1,13 @@
 {
   "name": "eslint-plugin-notice",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "An eslint rule that checks the top of files and --fix them too!",
-  "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
+  "main": "lib/index.js",
+  "type": "commonjs",
   "scripts": {
-    "test": "node tests/lib/rules/notice.js && node tests/test-utils.js && mocha staging"
+    "build": "tsc -p ./tsconfig.build.json",
+    "prepublishOnly": "npm run build",
+    "test": "vitest"
   },
   "keywords": [
     "eslint",
@@ -21,20 +21,46 @@
   "repository": "https://github.com/nickdeis/eslint-plugin-notice",
   "author": "nickdeis",
   "license": "MIT",
-  "devDependencies": {
-    "eslint": "^8.57.0",
-    "eslint-plugin-self": "^1.2.0",
-    "eslint6": "npm:eslint@^6.8.0",
-    "eslint7": "npm:eslint@^7.32.0",
-    "eslint9": "npm:eslint@^9.3.0",
-    "mocha": "^10.4.0"
-  },
   "dependencies": {
+    "@typescript-eslint/utils": "8.17.0",
     "find-root": "^1.1.0",
     "lodash": "^4.17.21",
-    "metric-lcs": "^0.1.2"
+    "metric-lcs": "^1.0.3",
+    "zod": "^3.23.8"
   },
   "peerDependencies": {
-    "eslint": ">=3.0.0"
+    "eslint": ">=5"
+  },
+  "files": [
+    "lib",
+    "tsconfig.build.json",
+    "tsconfig.json"
+  ],
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "@types/eslint": "^9.6.1",
+    "@types/eslint__js": "^8.42.3",
+    "@types/find-root": "^1.1.4",
+    "@types/lodash": "^4.17.13",
+    "@types/node": "^22.10.1",
+    "@typescript-eslint/parser": "^8.17.0",
+    "@typescript-eslint/rule-tester": "8.17.0",
+    "eslint": "^9.16.0",
+    "eslint-plugin-eslint-plugin": "^6.3.2",
+    "eslint-types8": "npm:@types/eslint@^8.56.12",
+    "eslint8": "npm:eslint@^8.57.0",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "8.17.0",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "npm": ">=8",
+    "node": ">=18"
   }
 }
