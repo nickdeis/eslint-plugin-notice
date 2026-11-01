@@ -70,7 +70,7 @@ function createToleranceTestCase(nonMatchingTolerance) {
  * Since we norm the output of templates, we need to norm the expected output of --fix
  */
 function readAndNormalize(rpath){
-  return fs.readFileSync(__dirname + rpath, "utf8").replace(/\r\n/g, "\n");
+  return fs.readFileSync(__dirname + rpath, "utf8").replace(/\r\n/g, "\n").replace("2024", new Date().getFullYear());
 }
 
 for(const [version,ruleTester] of RULE_TESTERS){
