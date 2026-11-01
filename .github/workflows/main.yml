@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # Have to use 18.x and up because later versions of eslint require structuredClone
-        node-version: [18.x, 20.x]
+        # ESLint 10 requires Node.js ^20.19.0 || ^22.13.0 || >=24
+        node-version: [20.x, 22.x, 24.x]
     steps:
       - uses: actions/checkout@v4
       - name: Run tests against node ${{ matrix.node-version }}

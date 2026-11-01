@@ -35,18 +35,23 @@ module.exports = {
           onNonMatchingHeader,
           nonMatchingTolerance,
           messages
-        } = resolveOptions(context.options[0], context.getFilename());
+        } = resolveOptions(context.options[0], context.filename || context.getFilename());
 
-        const sourceCode = context.getSourceCode();
+        const sourceCode = context.sourceCode || context.getSourceCode();
         const text = sourceCode.getText().substring(0, chars);
         const firstComment = sourceCode.getAllComments()[0];
         return {
           Program(node) {
             let topNode;
             let hasHeaderComment = false;
+            //ESLint 10 and some parsers start Program at the beginning of the file, so use the first token like older versions did
+            const firstToken = sourceCode.getFirstToken(node);
+            const programCoversFile = firstToken && node.range[0] === 0;
+            const firstCodeLine = (programCoversFile ? firstToken : node).loc.start.line;
+            const loc = programCoversFile ? { start: firstToken.loc.start, end: sourceCode.getLastToken(node).loc.end } : undefined;
             if (!firstComment) {
               topNode = node;
-            } else if (firstComment.loc.start.line <= node.loc.start.line) {
+            } else if (firstComment.loc.start.line <= firstCodeLine) {
               hasHeaderComment = true;
               topNode = firstComment;
             } else {
@@ -69,6 +74,7 @@ module.exports = {
                 const fix = createFixer({ resolvedTemplate, hasHeaderComment, topNode, onNonMatchingHeader });
                 const report = {
                   node,
+                  loc,
                   message: messages.whenOutsideTolerance,
                   fix,
                   data: { similarity: Math.round(dist * 1000) / 1000 }
@@ -81,6 +87,7 @@ module.exports = {
             if (hasHeaderComment && onNonMatchingHeader === "report" && !headerMatches) {
               const report = {
                 node,
+                loc,
                 message: messages.reportAndSkip
               };
               context.report(report);
@@ -89,7 +96,7 @@ module.exports = {
             //Select fixer based off onNonMatchingHeader
             const fix = createFixer({ resolvedTemplate, hasHeaderComment, topNode, onNonMatchingHeader });
             if (!headerMatches) {
-              const report = { node, message: messages.whenFailedToMatch, fix };
+              const report = { node, loc, message: messages.whenFailedToMatch, fix };
               context.report(report);
               return;
             }
