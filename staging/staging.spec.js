@@ -1,5 +1,6 @@
 const ESLint8 = require("eslint").ESLint,
 ESLint9 = require("eslint9").ESLint,
+ESLint10 = require("eslint10").ESLint,
 ESLint7 = require("eslint7").ESLint;
 const path = require("path");
 const assert = require('assert');
@@ -46,7 +47,8 @@ const textCRLFNoHeader = textLFNoHeader.replace(/\n/g,"\r\n");
 const ESLINTS = [
   [7,ESLint7,{overrideConfig:LINE_ENDING_CONFIG_V8,useEslintrc:false}],
   [8,ESLint8,{overrideConfig:LINE_ENDING_CONFIG_V8,useEslintrc:false}],
-  [9,ESLint9,{overrideConfig:LINE_ENDING_CONFIG_V9,overrideConfigFile:true}]
+  [9,ESLint9,{overrideConfig:LINE_ENDING_CONFIG_V9,overrideConfigFile:true}],
+  [10,ESLint10,{overrideConfig:LINE_ENDING_CONFIG_V9,overrideConfigFile:true}]
 ]
 
 for(const [version,ESLint,config] of ESLINTS){
